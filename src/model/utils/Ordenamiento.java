@@ -7,16 +7,19 @@ import model.data_structures.ILista;
 public class Ordenamiento<T extends Comparable<T>> {
 
 	public void ordenarInsercion(ILista<T> lista, Comparator<T> criterio, boolean ascendente) {
-		int scale = (ascendente) ? 1 : -1;
-		for (int i = 0; i < lista.size(); i++) {
+		int n = lista.size();
+		int scale = ascendente ? 1 : -1;
+		for (int i = 0; i <= n; i++) {
 			boolean flag = false;
-			for (int j = i + 1; j > 0 && flag; j--) {
-				T elem = lista.getElement(j);
+			for (int j = i + 1; j > 0 && !flag; j -= 1) {
+				T elem1 = lista.getElement(j);
 				T elem2 = lista.getElement(j - 1);
-				if (criterio.compare(elem, elem2) * scale < 0) {
-					lista.exchange(i, j);
-				} else {
-					flag = true;
+				if (elem1 != null && elem2 != null) {
+					int factorComparacion = scale * criterio.compare(elem1, elem2);
+					if (factorComparacion < 0) {
+						lista.exchange(j, j - 1);
+					} else
+						flag = true;
 				}
 			}
 		}
@@ -31,7 +34,7 @@ public class Ordenamiento<T extends Comparable<T>> {
 		while (h >= 1) {
 			for (int i = h + 1; i < n; i++) {
 				boolean flag = false;
-				for (int j = i; j > h; j -= h) {
+				for (int j = i; j > h && !flag; j -= h) {
 					T elem = lista.getElement(j);
 					T elem2 = lista.getElement(j - h);
 					if (criterio.compare(elem, elem2) * scale < 0) {
@@ -94,12 +97,17 @@ public class Ordenamiento<T extends Comparable<T>> {
 	private final int partition(ILista<T> lista, Comparator<T> criterio, boolean ascendente, int lo, int hi) {
 		int follower, leader;
 		follower = leader = lo;
-		while (leader < hi) {
-			int factorComparacion = (ascendente ? 1 : -1)
-					* criterio.compare(lista.getElement(leader), lista.getElement(hi));
-			if (factorComparacion < 0) {
-				lista.exchange(follower, leader);
-				follower++;
+		while (leader <= hi) {
+			T elem1 = lista.getElement(leader);
+			T elem2 = lista.getElement(hi);
+			if (elem1 != null && elem2 != null) {
+
+				int factorComparacion = (ascendente ? 1 : -1)
+						* criterio.compare(elem1, elem2);
+				if (factorComparacion < 0) {
+					lista.exchange(follower, leader);
+					follower++;
+				}
 			}
 			leader++;
 		}
@@ -124,6 +132,6 @@ public class Ordenamiento<T extends Comparable<T>> {
 	 * Método de entrada, lanza el quick sort recursivo.
 	 */
 	public final void quickSort(ILista<T> lista, Comparator<T> criterio, boolean ascendente) {
-		ordenarQuicksort(lista, criterio, ascendente, 1, lista.size());
+		ordenarQuicksort(lista, criterio, ascendente, 0, lista.size() - 1);
 	}
 }

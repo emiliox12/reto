@@ -1,6 +1,6 @@
 package model.data_structures;
 
-import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * 2019-01-23 Estructura de Datos Arreglo Dinamico de T. El arreglo al llenarse
@@ -162,7 +162,7 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 	@Override
 	public int isPresent(T element) {
 		for (int i = 0; i < currentSize; i++) {
-			if (elements.equals(elements[i])) {
+			if (element.compareTo(elements[i]) == 0) {
 				return i;
 			}
 		}
@@ -171,9 +171,10 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 
 	@Override
 	public void exchange(int pos1, int pos2) {
-		T temp = elements[pos1];
-		elements[pos1] = elements[pos2];
-		elements[pos2] = temp;
+		T temp1 = elements[pos1];
+		T temp2 = elements[pos2];
+		elements[pos1] = temp2;
+		elements[pos2] = temp1;
 	}
 
 	@Override
@@ -184,8 +185,8 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 	@Override
 	public String toString() {
 		String result = "";
-		for (T t : elements) {
-			result += " " + t;
+		for (int i = 0; i < currentSize; i++) {
+			result += " " + elements[i] + "\n";
 		}
 		return result;
 	}
@@ -197,7 +198,7 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 		}
 		int elemCount = (numElementos < currentSize) ? numElementos : currentSize;
 		ArregloDinamico<T> newArray = new ArregloDinamico<>(numElementos + 20);
-		for (int i = 0; i < numElementos; i++) {
+		for (int i = 0; i < elemCount; i++) {
 			newArray.insertElement(elements[i], i);
 		}
 		return newArray;
@@ -210,8 +211,19 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 		}
 		int elemCount = (size - pos < currentSize) ? size : currentSize;
 		ArregloDinamico<T> newArray = new ArregloDinamico<>(size + 20);
-		for (int i = pos -1; i < size; i++) {
+		for (int i = pos - 1; i < elemCount; i++) {
 			newArray.insertElement(elements[i], i);
+		}
+		return newArray;
+	}
+
+	@Override
+	public ILista<T> filetr(Predicate<T> p) {
+		ArregloDinamico<T> newArray = new ArregloDinamico<>(currentSize);
+		for (int i = 0; i < currentSize; i++) {
+			if (p.test(elements[i])) {
+				newArray.addLast(elements[i]);
+			}
 		}
 		return newArray;
 	}

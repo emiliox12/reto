@@ -1,5 +1,7 @@
 package model.data_structures;
 
+import java.util.function.Predicate;
+
 public interface ILista<T extends Comparable<T>> {
 
 	/**
@@ -133,4 +135,5 @@ public interface ILista<T extends Comparable<T>> {
 	*/
 	public ILista<T> subList(int pos, int size);
 	
+	public ILista<T> filetr(Predicate<T> p);
 }

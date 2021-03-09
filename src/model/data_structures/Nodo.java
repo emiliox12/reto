@@ -2,14 +2,14 @@ package model.data_structures;
 
 public class Nodo<T extends Comparable<T>> {
 
-	public Nodo next;
+	public Nodo<T> next;
 	private T element;
 	
 	public Nodo(T element) {
 		this.element = element;
 	}
 
-	public Nodo getNext() {
+	public Nodo<T> getNext() {
 		return next;
 	}
 	
@@ -23,5 +23,10 @@ public class Nodo<T extends Comparable<T>> {
 
 	public void setNext(Nodo next) {
 		this.next = next;
+	}
+	
+	@Override
+	public String toString() {
+		return element.toString();
 	}
 }

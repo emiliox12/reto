@@ -1,10 +1,16 @@
 package model.data_structures;
 
-import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 
 	private Nodo<T> raiz;
+	private Nodo<T> end;
+	private int size;
+
+	public ListaEncadenada() {
+		this.size = 0;
+	}
 
 	@Override
 	public void addFirst(T element) {
@@ -12,26 +18,31 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 		Nodo<T> newNode = new Nodo<T>(element);
 		if (primeroActual == null) {
 			raiz = newNode;
+			end = newNode;
 		}
 
 		else {
 			newNode.setNext(primeroActual);
 			raiz = newNode;
 		}
+		size++;
 	}
 
 	@Override
 	public void addLast(T element) {
 		Nodo<T> actual = raiz;
 		Nodo<T> newNode = new Nodo<T>(element);
+		end = newNode;
 		if (raiz == null) {
 			raiz = newNode;
+			size++;
 			return;
 		}
 		while (actual.getNext() != null) {
 			actual = actual.getNext();
 		}
 		actual.setNext(newNode);
+		size++;
 	}
 
 	@Override
@@ -55,7 +66,7 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 			nodoActual = nodoActual.getNext();
 			posit++;
 		}
-
+		size++;
 	}
 
 	@Override
@@ -67,8 +78,8 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 		} else {
 			raiz = null;
 		}
-
-		return (T) eliminado;
+		size--;
+		return eliminado.getElement();
 	}
 
 	@Override
@@ -80,16 +91,14 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 			if (actual.getNext() == null) {
 				actual = null;
 			}
-			actual = (Nodo<T>) actual.getNext();
+			actual = actual.getNext();
 		}
-
-		return (T) rta;
+		size--;
+		return rta.getElement();
 	}
 
 	@Override
 	public T deleteElement(int pos) {
-		// TODO Auto-generated method stub
-
 		Nodo<T> actual = raiz.getNext();
 		Nodo<T> anterior = raiz;
 		Nodo<T> siguiente;
@@ -109,8 +118,8 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 			actual = actual.getNext();
 			posit++;
 		}
-
-		return (T) actual;
+		size--;
+		return actual.getElement();
 	}
 
 	@Override
@@ -120,46 +129,36 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 
 	@Override
 	public T lastElement() {
-
-		Nodo<T> actual = raiz;
-
-		while (actual.getNext() != null) {
-			actual = actual.getNext();
-		}
-		return actual.getElement();
+		return end.getElement();
 	}
 
 	@Override
 	public T getElement(int pos) {
-
-		Nodo<T> actual = raiz.getNext();
+		Nodo<T> actual = raiz;
 		int posit = 0;
-		T rta = null;
-		if (posit == pos - 1) {
-			firstElement();
+		if (pos > size) {
+			return null;
 		}
-		while (actual.getNext() != null && posit != pos - 1) {
-
+		while (actual != null) {
 			if (posit == pos) {
-				rta = actual.getElement();
+				return actual.getElement();
 			}
-			actual = (Nodo<T>) actual.getNext();
+			actual = actual.getNext();
 			posit++;
 		}
 
-		return (T) rta;
+		return null;
 
 	}
 
 	@Override
 	public int size() {
-
 		Nodo<T> actual = raiz;
 		int rta = 0;
 		if (raiz != null) {
 			while (actual != null) {
 				rta++;
-				actual = (Nodo<T>) actual.getNext();
+				actual = actual.getNext();
 			}
 		}
 
@@ -177,54 +176,40 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 
 	@Override
 	public int isPresent(T element) {
-		int rta = 0;
+		int cont = 0;
 		Nodo<T> actual = raiz;
+		if (actual == null) {
+			return -1;
+		}
 		while (actual != null) {
-			if (actual.getElement().equals(element)) {
-				rta = 1;
+			if (actual.getElement().compareTo(element) == 0) {
+				return cont;
 			}
-			actual = (Nodo<T>) actual.getNext();
+			actual = actual.getNext();
+			cont++;
 		}
 
-		return rta;
+		return -1;
 	}
 
 	@Override
 	public void exchange(int pos1, int pos2) {
-
-		ArrayList<Nodo<T>> arregloTemporal = new ArrayList<Nodo<T>>();
-		Nodo<T> actual = raiz;
-
-		while (actual != null) {
-			arregloTemporal.add(actual);
-			actual = actual.getNext();
-		}
-		Nodo<T> uno = arregloTemporal.get(pos1);
-		Nodo<T> dos = arregloTemporal.get(pos2);
-		Nodo<T> anteriorUno = arregloTemporal.get(pos1 - 1);
-		Nodo<T> anteriorDos = arregloTemporal.get(pos2 - 1);
-
-		if (uno != null && dos != null) {
-			Nodo<T> Siguiente1 = uno.getNext();
-			Nodo<T> Siguiente2 = dos.getNext();
-			uno.setNext(Siguiente2);
-			dos.setNext(Siguiente1);
-			anteriorUno = dos;
-			anteriorDos = uno;
-		}
+		T elem1 = getElement(pos1);
+		T elem2 = getElement(pos2);
+		changeInfo(pos1, elem2);
+		changeInfo(pos2, elem1);
 	}
 
 	@Override
 	public void changeInfo(int pos, T elem) {
-		// TODO Auto-generated method stub
 		Nodo<T> actual = raiz;
 		int posit = 0;
-		while (actual.getNext() != null && posit <= pos - 1) {
-
-			if (posit == pos - 1) {
+		while (actual != null) {
+			if (posit == pos) {
 				actual.setElement(elem);
 			}
 			actual = actual.getNext();
+			posit++;
 		}
 	}
 
@@ -232,10 +217,9 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 	public String toString() {
 		Nodo<T> actual = raiz;
 		String result = "";
-		if (raiz == null)
-			return "";
-		while (actual.next != null) {
-			result += " " + actual;
+		while (actual != null) {
+			result += " " + actual + "\n";
+			actual = actual.getNext();
 		}
 		return result;
 	}
@@ -243,21 +227,15 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 	@Override
 	public ListaEncadenada<T> sublista(int numElementos) {
 		ListaEncadenada<T> rta = new ListaEncadenada<>();
-		if (numElementos == 0) {
+		if (numElementos == 0 || this.size == 0) {
 			return rta;
 		}
+		Nodo<T> actual = raiz;
 		ListaEncadenada<T> newLinkedlist = new ListaEncadenada<>();
-		Nodo<T> nuevoRaiz = new Nodo<T>(null);
-		newLinkedlist.raiz = nuevoRaiz;
-		Nodo<T> original = raiz;
-		nuevoRaiz = original;
-
-		while (original.getNext() != null && newLinkedlist.size() <= numElementos) {
-
-			if (newLinkedlist.size() != numElementos) {
-				nuevoRaiz.setNext(original.getNext());
-			}
-			original = original.getNext();
+		int elemNum = (numElementos >= size) ? size : numElementos;
+		while (actual != null && newLinkedlist.size() < elemNum) {
+			newLinkedlist.addLast(actual.getElement());
+			actual = actual.getNext();
 		}
 		rta = newLinkedlist;
 		return rta;
@@ -278,11 +256,23 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 				return result;
 			}
 		}
-		System.out.println(actual);
 		for (int i = 0; i < listSize; i++) {
 			result.addLast(actual.getElement());
 			actual = actual.getNext();
 		}
 		return result;
+	}
+
+	@Override
+	public ILista<T> filetr(Predicate<T> p) {
+		ListaEncadenada<T> newArray = new ListaEncadenada<>();
+		Nodo<T> actual = raiz;
+		while (actual != null) {
+			if (p.test(actual.getElement())) {
+				newArray.addLast(actual.getElement());
+			}
+			actual = actual.getNext();
+		}
+		return newArray;
 	}
 }
