@@ -3,7 +3,6 @@ package model.logic;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.Comparator;
-import java.util.function.Predicate;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -35,8 +34,8 @@ public class Modelo {
 	 */
 	public Modelo() {
 		sorter = new Ordenamiento<YoutubeVideo>();
-		orderedByLike = new ArregloDinamico<YoutubeVideo>(100);
-		orderedByViews = new ArregloDinamico<YoutubeVideo>(100);
+		orderedByLike = new ArregloDinamico<YoutubeVideo>(100, true);
+		orderedByViews = new ArregloDinamico<YoutubeVideo>(100, true);
 		categories = new ListaEncadenada<Category>();
 		countries = new ListaEncadenada<Country>();
 		// datos = new ListaEncadenada<YoutubeVideo>();
@@ -79,7 +78,7 @@ public class Modelo {
 	 */
 	public YoutubeVideo eliminar(YoutubeVideo dato) {
 		int pos = orderedByLike.isPresent(dato);
-		return orderedByLike.deleteElement(pos);
+		return orderedByLike.deleteElementPos(pos);
 	}
 
 	public void cargar() {

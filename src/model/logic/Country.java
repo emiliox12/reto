@@ -2,8 +2,6 @@ package model.logic;
 
 import java.util.Comparator;
 
-import org.apache.commons.csv.CSVRecord;
-
 import model.data_structures.ILista;
 import model.data_structures.ListaEncadenada;
 import model.utils.Ordenamiento;

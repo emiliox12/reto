@@ -21,7 +21,7 @@ public class Nodo<T extends Comparable<T>> {
 		this.element = elemnt;
 	}
 
-	public void setNext(Nodo next) {
+	public void setNext(Nodo<T> next) {
 		this.next = next;
 	}
 	

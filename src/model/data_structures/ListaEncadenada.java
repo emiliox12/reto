@@ -7,6 +7,7 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 	private Nodo<T> raiz;
 	private Nodo<T> end;
 	private int size;
+	private boolean ascending;
 
 	public ListaEncadenada() {
 		this.size = 0;
@@ -98,7 +99,7 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 	}
 
 	@Override
-	public T deleteElement(int pos) {
+	public T deleteElementPos(int pos) {
 		Nodo<T> actual = raiz.getNext();
 		Nodo<T> anterior = raiz;
 		Nodo<T> siguiente;
@@ -274,5 +275,65 @@ public class ListaEncadenada<T extends Comparable<T>> implements ILista<T> {
 			actual = actual.getNext();
 		}
 		return newArray;
+	}
+
+	@Override
+	public void addOrdered(T element) {
+		Nodo<T> newNode = new Nodo<T>(element);
+		int scale = (ascending) ? 1 : -1;
+		Nodo<T> actual = raiz;
+		if (raiz == null) {
+			raiz = end = newNode;
+			return;
+		}
+		if (raiz.getElement().compareTo(element) * scale < 0) {
+			newNode.setNext(raiz);
+			raiz = newNode;
+			return;
+		}
+		while (actual.getNext() != null) {
+			actual = actual.getNext();
+			if (actual.getElement().compareTo(element) * scale < 0) {
+				newNode.setNext(actual);
+				return;
+			}
+		}
+		end.setNext(newNode);
+		end = newNode;
+	}
+
+	@Override
+	public T find(T element) {
+		Nodo<T> actual = raiz;
+		if (actual == null) {
+			return null;
+		}
+		while (actual != null) {
+			if (actual.getElement().compareTo(element) == 0) {
+				return actual.getElement();
+			}
+			actual = actual.getNext();
+		}
+		return null;
+	}
+
+	@Override
+	public T deleteElement(T element) {
+		Nodo<T> actual = raiz;
+		Nodo<T> prev = null;
+		if (actual == null) {
+			return null;
+		} else if (raiz.getElement().compareTo(element) == 0) {
+			raiz = raiz.getNext();
+		}
+		while (actual != null) {
+			if (actual.getElement().compareTo(element) == 0) {
+				prev.setNext(actual.getNext());
+				return actual.getElement();
+			}
+			prev = actual;
+			actual = actual.getNext();
+		}
+		return null;
 	}
 }

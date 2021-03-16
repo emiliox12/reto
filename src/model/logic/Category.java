@@ -2,8 +2,6 @@ package model.logic;
 
 import java.util.Comparator;
 
-import org.junit.runner.manipulation.Sorter;
-
 import model.data_structures.ILista;
 import model.data_structures.ListaEncadenada;
 import model.utils.Ordenamiento;

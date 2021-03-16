@@ -49,7 +49,16 @@ public interface ILista<T extends Comparable<T>> {
 	 * 
 	 * @return el elemento eliminado
 	 */
-	T deleteElement(int pos);
+	T deleteElementPos(int pos);
+	
+	/*
+	 * Elimina el elemento de una posición válida. Se retorna el elemento eliminado.
+	 * 
+	 * @param pos
+	 * 
+	 * @return el elemento eliminado
+	 */
+	T deleteElement(T element);
 
 	/*
 	 * Retorna el primer elemento
@@ -101,6 +110,17 @@ public interface ILista<T extends Comparable<T>> {
 	int isPresent(T element);
 
 	/*
+	 * Retorna la posición válida de un elemento. Si no se encuentra el elemento, el
+	 * valor retornado es -1.
+	 * 
+	 * @param element
+	 * 
+	 * @return la posición válida de un elemento. Si no se encuentra el elemento, el
+	 * valor retornado es -1.
+	 */
+	T find(T element);
+
+	/*
 	 * Intercambia la información de los elementos en dos posiciones válidas.
 	 * 
 	 * @param pos1
@@ -136,4 +156,6 @@ public interface ILista<T extends Comparable<T>> {
 	public ILista<T> subList(int pos, int size);
 	
 	public ILista<T> filetr(Predicate<T> p);
+	
+	public void addOrdered(T element);
 }
